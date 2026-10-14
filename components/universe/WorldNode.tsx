@@ -20,6 +20,7 @@ function Shape({ section, mats }: { section: Section; mats: THREE.MeshStandardMa
   const edges = useMemo(() => {
     if (section.shape === "crystal") return new THREE.EdgesGeometry(new THREE.OctahedronGeometry(0.78, 0));
     if (section.shape === "knot") return new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.95, 0));
+    if (section.shape === "panes") return new THREE.EdgesGeometry(new THREE.PlaneGeometry(1.15, 0.78));
     return new THREE.EdgesGeometry(new THREE.DodecahedronGeometry(0.95, 0));
   }, [section.shape]);
 
@@ -31,6 +32,8 @@ function Shape({ section, mats }: { section: Section; mats: THREE.MeshStandardMa
       if (c.current) c.current.rotation.z += dt * 0.5;
     } else if (section.shape === "knot") {
       if (a.current) a.current.rotation.x += dt * 0.25;
+    } else if (section.shape === "panes") {
+      if (a.current) a.current.rotation.x = 0.12 + Math.sin(performance.now() * 0.0006) * 0.08;
     } else {
       if (b.current) b.current.rotation.z += dt * 0.6;
     }
@@ -75,6 +78,54 @@ function Shape({ section, mats }: { section: Section; mats: THREE.MeshStandardMa
           <sphereGeometry args={[0.16, 24, 24]} />
         </mesh>
         <group scale={0.95}>{wire}</group>
+      </group>
+    );
+  }
+
+  if (section.shape === "panes") {
+    // Web Gallery: a fanned stack of browser windows, like pages in a portfolio.
+    const panes: [number, number, number][] = [
+      [-0.24, -0.18, -0.36],
+      [0, 0, 0],
+      [0.24, 0.18, 0.36],
+    ];
+    return (
+      <group ref={spin}>
+        <group ref={a} rotation={[0.12, -0.45, 0.04]} scale={0.82}>
+          {panes.map((p, i) => (
+            <group key={i} position={p}>
+              <mesh material={i === panes.length - 1 ? m1 : undefined}>
+                <boxGeometry args={[1.15, 0.78, 0.02]} />
+                {i !== panes.length - 1 && (
+                  <meshStandardMaterial
+                    color={section.color}
+                    emissive={section.color}
+                    emissiveIntensity={0.5}
+                    transparent
+                    opacity={0.22}
+                    depthWrite={false}
+                    toneMapped={false}
+                  />
+                )}
+              </mesh>
+              <lineSegments geometry={edges} position={[0, 0, 0.012]} raycast={() => null}>
+                <lineBasicMaterial color={section.accent} transparent opacity={0.7} blending={THREE.AdditiveBlending} depthWrite={false} />
+              </lineSegments>
+              {i === panes.length - 1 && (
+                <>
+                  <mesh position={[0, 0.27, 0.015]} material={m2}>
+                    <boxGeometry args={[1.05, 0.012, 0.005]} />
+                  </mesh>
+                  {[0, 1, 2].map((d) => (
+                    <mesh key={d} position={[-0.47 + d * 0.07, 0.33, 0.015]} material={m2}>
+                      <sphereGeometry args={[0.022, 12, 12]} />
+                    </mesh>
+                  ))}
+                </>
+              )}
+            </group>
+          ))}
+        </group>
       </group>
     );
   }
@@ -153,8 +204,9 @@ export function WorldNode({ section }: { section: Section }) {
   });
 
   const over = (e: ThreeEvent<PointerEvent>) => {
-    e.stopPropagation();
+    // While any world is open, let pointer events pass through to the artifacts behind this hit area.
     if (useUniverse.getState().active) return;
+    e.stopPropagation();
     useUniverse.getState().setHovered(section.id);
     document.body.style.cursor = "pointer";
   };
@@ -163,6 +215,7 @@ export function WorldNode({ section }: { section: Section }) {
     document.body.style.cursor = "";
   };
   const click = (e: ThreeEvent<MouseEvent>) => {
+    if (useUniverse.getState().active === section.id) return;
     e.stopPropagation();
     document.body.style.cursor = "";
     goTo(section.id);

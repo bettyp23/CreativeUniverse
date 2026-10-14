@@ -1,12 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Static export: `npm run build` produces a plain /out folder you can host
-  // anywhere (GitHub Pages, Netlify, Vercel).
+  // anywhere (Vercel, Netlify, GitHub Pages with a custom domain).
   output: "export",
   images: { unoptimized: true },
-  // Relative asset paths so the build also works from a sub-folder
-  // (e.g. username.github.io/repo-name).
-  assetPrefix: process.env.NEXT_PUBLIC_ASSET_PREFIX ?? "./",
+  // Assets load from the domain root, which project pages under /projects/ need.
+  // Set NEXT_PUBLIC_ASSET_PREFIX only if the site is served from a sub-folder.
+  assetPrefix: process.env.NEXT_PUBLIC_ASSET_PREFIX || undefined,
   trailingSlash: true,
 };
 export default nextConfig;

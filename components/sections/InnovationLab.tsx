@@ -1,11 +1,10 @@
-import { sectionById } from "@/lib/sections";
-import { WorkList } from "./WorkList";
+import { projectsIn } from "@/lib/projects";
+import { ProjectList } from "./ProjectList";
 
 /**
- * Focused view for this world. Grow it freely: add filters, galleries,
- * case-study links or a full page route later.
+ * Focused view for this world. Grow it freely: add filters, galleries or
+ * anything else the world needs. Projects come from lib/projects.ts.
  */
 export default function InnovationLab() {
-  const section = sectionById("lab");
-  return <WorkList items={section.items} />;
+  return <ProjectList projects={projectsIn("lab")} />;
 }

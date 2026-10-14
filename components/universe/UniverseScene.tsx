@@ -12,6 +12,7 @@ import { Constellation } from "./Constellation";
 import { OrbitRings } from "./OrbitRings";
 import { Core } from "./Core";
 import { WorldNode } from "./WorldNode";
+import { ProjectArtifacts } from "./ProjectArtifacts";
 import { CameraRig } from "./CameraRig";
 import { LabelProjector } from "./LabelProjector";
 
@@ -26,7 +27,10 @@ export default function UniverseScene() {
       dpr={dpr}
       camera={{ position: [-2.3, 0.6, 11.5], fov: 42, near: 0.1, far: 200 }}
       gl={{ antialias: false, powerPreference: "high-performance", alpha: false }}
-      onPointerMissed={() => useUniverse.getState().setHovered(null)}
+      onPointerMissed={() => {
+        useUniverse.getState().setHovered(null);
+        useUniverse.getState().setHoveredProject(null);
+      }}
       aria-hidden
     >
       <color attach="background" args={["#04030c"]} />
@@ -54,6 +58,7 @@ export default function UniverseScene() {
         {sections.map((s) => (
           <WorldNode key={s.id} section={s} />
         ))}
+        <ProjectArtifacts />
       </Suspense>
 
       <CameraRig />

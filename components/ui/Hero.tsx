@@ -8,13 +8,15 @@ import { goTo } from "@/lib/useNavigation";
 export function Hero() {
   const active = useUniverse((s) => s.active);
   const arrived = useUniverse((s) => s.arrived);
+  const about = useUniverse((s) => s.about);
+  const hidden = !!active || about;
 
   return (
     <section
       className="hero"
-      data-visible={!active && arrived}
-      aria-hidden={!!active}
-      inert={active ? true : undefined}
+      data-visible={!hidden && arrived}
+      aria-hidden={hidden}
+      inert={hidden ? true : undefined}
     >
       <h1 className="hero__heading">{site.hero.heading}</h1>
       <p className="hero__body">{site.hero.body}</p>

@@ -5,10 +5,8 @@ import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { isPortrait, positionFor, sectionById } from "@/lib/sections";
 import { useUniverse } from "@/lib/store";
-
-const prefersReducedMotion = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+import { prefersReducedMotion } from "@/lib/useNavigation";
+import { artifactPositions } from "./worldPositions";
 
 /**
  * Glides the camera between the universe view and each world.
@@ -36,10 +34,15 @@ export function CameraRig() {
   }, [camera]);
 
   useFrame((state, dt) => {
-    const { active, arrived, setArrived } = useUniverse.getState();
+    const { active, arrived, setArrived, focusProject } = useUniverse.getState();
     const portrait = isPortrait(size.width, size.height);
+    const artifact = focusProject ? artifactPositions[focusProject] : undefined;
 
-    if (active) {
+    if (artifact) {
+      // Fly in close to a project's artifact just before its page opens.
+      tgt.copy(artifact);
+      pos.set(tgt.x + 0.15, tgt.y + 0.12, tgt.z + 1.5);
+    } else if (active) {
       const p = positionFor(sectionById(active), portrait);
       if (portrait) {
         tgt.set(p[0], p[1] - 1.45, p[2]);
@@ -63,7 +66,7 @@ export function CameraRig() {
     }
 
     // Slower, more cinematic easing for the opening and for zoom-ins.
-    let lambda = active ? 2.1 : 1.8;
+    let lambda = artifact ? 3.2 : active ? 2.1 : 1.8;
     if (!arrived) {
       intro.current += dt;
       lambda = 0.9 + Math.min(intro.current, 3) * 0.3;

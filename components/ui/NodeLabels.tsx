@@ -13,6 +13,7 @@ export function NodeLabels() {
   const active = useUniverse((s) => s.active);
   const hovered = useUniverse((s) => s.hovered);
   const arrived = useUniverse((s) => s.arrived);
+  const about = useUniverse((s) => s.about);
   const setHovered = useUniverse((s) => s.setHovered);
 
   return (
@@ -25,7 +26,7 @@ export function NodeLabels() {
             labelRefs[s.id] = el;
           }}
           className="node-label"
-          data-state={active || !arrived ? "hidden" : hovered === s.id ? "hover" : "idle"}
+          data-state={active || about || !arrived ? "hidden" : hovered === s.id ? "hover" : "idle"}
           style={{ "--node": s.color } as React.CSSProperties}
           onClick={() => goTo(s.id)}
           onPointerEnter={() => !active && setHovered(s.id)}

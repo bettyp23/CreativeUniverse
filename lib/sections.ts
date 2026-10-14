@@ -1,23 +1,15 @@
 // The three worlds of the universe.
-// Add, remove or edit entries in `items` to change what each world shows.
-// Each world's focused view lives in components/sections/<Name>.tsx, so it can
-// grow into a full page of its own later.
+// The projects inside each world live in lib/projects.ts.
 
-export type SectionId = "dev" | "ai" | "lab";
+export type SectionId = "dev" | "ai" | "lab" | "web";
 
-export type Shape = "crystal" | "knot" | "gyro";
-
-export interface WorkItem {
-  title: string;
-  summary: string;
-  tags: string[];
-  status: "Live" | "In progress" | "Concept";
-  href?: string;
-}
+export type Shape = "crystal" | "knot" | "gyro" | "panes";
 
 export interface Section {
   id: SectionId;
   title: string;
+  /** Shorter name for the phone navbar. */
+  shortTitle: string;
   tagline: string;
   description: string;
   /** Main glow color for the world's object and accents. */
@@ -29,13 +21,13 @@ export interface Section {
   position: [number, number, number];
   /** Tighter position used on tall, narrow screens such as phones. */
   portraitPosition: [number, number, number];
-  items: WorkItem[];
 }
 
 export const sections: Section[] = [
   {
     id: "dev",
     title: "Dev Projects",
+    shortTitle: "Dev",
     tagline: "Software I've designed, built and shipped.",
     description:
       "Web apps, tools and engineering work, from first sketch to production.",
@@ -44,30 +36,11 @@ export const sections: Section[] = [
     shape: "crystal",
     position: [-3.1, 1.25, 0.4],
     portraitPosition: [-1.45, 1.35, 0.4],
-    items: [
-      {
-        title: "Sample project one",
-        summary: "A short line about what this app does and who it's for.",
-        tags: ["Next.js", "TypeScript"],
-        status: "Live",
-      },
-      {
-        title: "Sample project two",
-        summary: "Replace these with your own builds in lib/sections.ts.",
-        tags: ["React Native", "API design"],
-        status: "In progress",
-      },
-      {
-        title: "Sample project three",
-        summary: "Link each one to a case study, demo or repository.",
-        tags: ["Node", "Postgres"],
-        status: "Live",
-      },
-    ],
   },
   {
     id: "ai",
     title: "AI Studio",
+    shortTitle: "AI",
     tagline: "Experiments with machine intelligence.",
     description:
       "AI workflows, generative visuals and concepts exploring what models can make with us.",
@@ -76,58 +49,32 @@ export const sections: Section[] = [
     shape: "knot",
     position: [2.9, 1.55, -1.0],
     portraitPosition: [1.5, 1.65, -0.6],
-    items: [
-      {
-        title: "Sample experiment one",
-        summary: "A generative series and the workflow behind it.",
-        tags: ["Image models", "Workflow"],
-        status: "Live",
-      },
-      {
-        title: "Sample experiment two",
-        summary: "An agent that turns rough notes into finished drafts.",
-        tags: ["LLMs", "Agents"],
-        status: "In progress",
-      },
-      {
-        title: "Sample experiment three",
-        summary: "A visual exploration of how a model sees colour.",
-        tags: ["Research", "Visuals"],
-        status: "Concept",
-      },
-    ],
   },
   {
     id: "lab",
     title: "Innovation Lab",
+    shortTitle: "Lab",
     tagline: "Prototypes and ideas from the near future.",
     description:
       "Concept builds, inventions and creative experiments that are still taking shape.",
     color: "#ff9a4d",
     accent: "#ff5fa2",
     shape: "gyro",
-    position: [0.4, -1.7, 1.3],
-    portraitPosition: [0.1, -1.7, 1.0],
-    items: [
-      {
-        title: "Sample prototype one",
-        summary: "A physical-digital object, from napkin sketch to working model.",
-        tags: ["Hardware", "Prototype"],
-        status: "In progress",
-      },
-      {
-        title: "Sample idea two",
-        summary: "A concept for a tool that doesn't exist yet.",
-        tags: ["Concept", "Product"],
-        status: "Concept",
-      },
-      {
-        title: "Sample experiment three",
-        summary: "An interaction experiment you can try in the browser.",
-        tags: ["WebGL", "Interaction"],
-        status: "Live",
-      },
-    ],
+    position: [-1.7, -2.0, 1.2],
+    portraitPosition: [-1.2, -1.3, 1.0],
+  },
+  {
+    id: "web",
+    title: "Web Gallery",
+    shortTitle: "Web",
+    tagline: "Websites designed and built for real businesses.",
+    description:
+      "Live sites for local businesses, from real estate to wellness clinics. Open one to explore it right here.",
+    color: "#2ee6c1",
+    accent: "#7fe3ff",
+    shape: "panes",
+    position: [2.5, -1.75, 0.5],
+    portraitPosition: [1.25, -1.05, 0.4],
   },
 ];
 
