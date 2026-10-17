@@ -1,11 +1,11 @@
 // Site-wide settings. Change your name, links and hero copy here.
 export const site = {
   name: "Betty Phipps",
-  url: "https://universeoftech.vercel.app",
-  title: "Betty Phipps — Creative Universe",
+  url: "https://pioneerdigitalai.com",
+  title: "Pioneer Digital",
   tagline: "Pick a star.",
   description:
-    "Betty Phipps designs and builds software, AI tools and websites.",
+    "Websites and digital systems built to help modern businesses grow, operate smarter, and move faster.",
   hero: {
     // TODO: check this role line describes you the way you want to be introduced.
     eyebrow: "Software & AI developer",
