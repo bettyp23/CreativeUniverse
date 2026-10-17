@@ -3,7 +3,7 @@
 import { site } from "@/lib/site";
 import { sections } from "@/lib/sections";
 import { useUniverse } from "@/lib/store";
-import { goTo } from "@/lib/useNavigation";
+import { goTo, openAbout } from "@/lib/useNavigation";
 
 export function Hero() {
   const active = useUniverse((s) => s.active);
@@ -25,9 +25,9 @@ export function Hero() {
         <button className="cta" onClick={() => goTo(sections[0].id)}>
           {site.hero.cta}
         </button>
-        <a className="pill-link" href="/web/">
+        <button className="pill-link" onClick={openAbout}>
           {site.hero.secondary}
-        </a>
+        </button>
       </div>
     </section>
   );

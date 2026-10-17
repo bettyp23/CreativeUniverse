@@ -39,7 +39,7 @@ npm run build    # static site in /out, ready for any host
 
 ## Deploying
 
-The site is built for the custom domain `bettinauot.com`. `npm run build` writes a static site to `/out`;
+The site is deployed at `universeoftech.vercel.app`. `npm run build` writes a static site to `/out`;
 deploy the repo on Vercel or Netlify (or upload `/out` to any static host) and point the domain at it.
 Assets load from the domain root, so project pages work at any depth. If you ever serve the site from
 a sub-folder instead, set `NEXT_PUBLIC_ASSET_PREFIX` to that folder when building.
