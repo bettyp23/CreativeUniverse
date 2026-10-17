@@ -50,7 +50,7 @@ export function SectionPanel() {
           <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden>
             <path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          Back to the universe
+          Overview
         </button>
 
         <header className="panel__header">
@@ -67,10 +67,10 @@ export function SectionPanel() {
             style={{ "--next": next.color } as React.CSSProperties}
             onClick={() => goTo(next.id)}
           >
-            <span className="panel__next-label">Next world</span>
+            <span className="panel__next-label">Next</span>
             <span className="panel__next-title">{next.title}</span>
           </button>
-          <span className="panel__esc">Press Esc to zoom out</span>
+          <span className="panel__esc">Esc to close</span>
         </footer>
       </div>
     </section>

@@ -31,8 +31,8 @@ export const sections: Section[] = [
     tagline: "Software I've designed, built and shipped.",
     description:
       "Web apps, tools and engineering work, from first sketch to production.",
-    color: "#5b8cff",
-    accent: "#7fe3ff",
+    color: "#5b8fe8",
+    accent: "#a8c8ff",
     shape: "crystal",
     position: [-3.1, 1.25, 0.4],
     portraitPosition: [-1.45, 1.35, 0.4],
@@ -44,8 +44,8 @@ export const sections: Section[] = [
     tagline: "Experiments with machine intelligence.",
     description:
       "AI workflows, generative visuals and concepts exploring what models can make with us.",
-    color: "#c26bff",
-    accent: "#ff5fa2",
+    color: "#8f80e8",
+    accent: "#c6bdff",
     shape: "knot",
     position: [2.9, 1.55, -1.0],
     portraitPosition: [1.5, 1.65, -0.6],
@@ -57,8 +57,8 @@ export const sections: Section[] = [
     tagline: "Prototypes and ideas from the near future.",
     description:
       "Concept builds, inventions and creative experiments that are still taking shape.",
-    color: "#ff9a4d",
-    accent: "#ff5fa2",
+    color: "#d39268",
+    accent: "#f0c8a8",
     shape: "gyro",
     position: [-1.7, -2.0, 1.2],
     portraitPosition: [-1.2, -1.3, 1.0],
@@ -70,8 +70,8 @@ export const sections: Section[] = [
     tagline: "Websites designed and built for real businesses.",
     description:
       "Live sites for local businesses, from real estate to wellness clinics. Open one to explore it right here.",
-    color: "#2ee6c1",
-    accent: "#7fe3ff",
+    color: "#4fbfa8",
+    accent: "#a6e6d8",
     shape: "panes",
     position: [2.5, -1.75, 0.5],
     portraitPosition: [1.25, -1.05, 0.4],

@@ -33,11 +33,13 @@ export interface Project {
   embed?: boolean;
   problem: string;
   built: string;
-  /** 2–3 images. Empty slots show a placeholder frame until you add them. */
+  /** 2–3 images. The Screenshots section is hidden while this is empty. */
   screenshots: Screenshot[];
+  /** True keeps the project off the site until it's ready. */
+  hidden?: boolean;
 }
 
-export const projects: Project[] = [
+const allProjects: Project[] = [
   // ---------- Dev Projects ----------
   {
     slug: "link2itinerary",
@@ -74,7 +76,7 @@ export const projects: Project[] = [
     type: "software",
     line: "One dashboard that brings a business's moving parts together.",
     tags: ["React Native", "Expo", "Express", "Prisma", "PostgreSQL"],
-    github: "https://github.com/bettyp23/centralized-business-command-center.",
+    github: "https://github.com/bettyp23/centralized-business-command-center",
     problem:
       "Solo service businesses, like trainers, tutors and photographers, run clients, bookings, tasks and follow-ups across a pile of apps that don't talk to each other.",
     built:
@@ -116,7 +118,8 @@ export const projects: Project[] = [
     title: "AlwaysInAI",
     section: "ai",
     type: "ai",
-    // TODO: write AlwaysInAI's one-line description, problem and build.
+    // TODO: write AlwaysInAI's one-line description, problem and build, then remove `hidden`.
+    hidden: true,
     line: "Details coming soon.",
     tags: ["AI"],
     problem: "Write-up coming soon.",
@@ -148,7 +151,7 @@ export const projects: Project[] = [
     title: "Bubble Sort Visualizer",
     section: "lab",
     type: "prototype",
-    line: "Watch a sorting algorithm dance its way to order.",
+    line: "An animated, step-by-step view of how bubble sort orders a list.",
     tags: ["Algorithms", "Visualization", "Animation"],
     problem: "Sorting algorithms are easy to recite and surprisingly hard to picture.",
     built:
@@ -273,6 +276,8 @@ export const projects: Project[] = [
     ],
   },
 ];
+
+export const projects = allProjects.filter((p) => !p.hidden);
 
 export const projectsIn = (section: SectionId) => projects.filter((p) => p.section === section);
 

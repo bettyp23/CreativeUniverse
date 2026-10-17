@@ -16,7 +16,7 @@ import { artifactPositions, worldPositions } from "./worldPositions";
  * direction away from the core (radians, in the screen plane), or orbiting the
  * world like a carousel.
  */
-const LAYOUT: Record<SectionId, number | "ring"> = { dev: 2.35, ai: 0.8, lab: -2.45, web: "ring" };
+const LAYOUT: Record<SectionId, number | "ring"> = { dev: 1.75, ai: 0.8, lab: -2.45, web: "ring" };
 const SPREAD = 0.72;
 const RING_SPEED = 0.06;
 

@@ -37,9 +37,6 @@ export default function ProjectShowcase({ slug }: { slug: string }) {
   };
 
   const home = `/#${section.id}`;
-  const shots = project.screenshots.length
-    ? project.screenshots
-    : [1, 2, 3].map(() => null);
 
   return (
     <div className="showcase" style={{ "--node": color, "--accent": section.accent } as React.CSSProperties}>
@@ -87,23 +84,19 @@ export default function ProjectShowcase({ slug }: { slug: string }) {
           </ul>
         </section>
 
-        <section className="showcase__block showcase__block--wide">
-          <h2>Screenshots</h2>
-          <div className="showcase__shots">
-            {shots.map((s, i) =>
-              s ? (
+        {project.screenshots.length > 0 && (
+          <section className="showcase__block showcase__block--wide">
+            <h2>Screenshots</h2>
+            <div className="showcase__shots">
+              {project.screenshots.map((s) => (
                 <figure key={s.src} className="shot">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={s.src} alt={s.alt} loading="lazy" />
                 </figure>
-              ) : (
-                <figure key={i} className="shot shot--empty">
-                  <figcaption>Screenshot coming soon</figcaption>
-                </figure>
-              ),
-            )}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        )}
 
         {(project.demo || project.github) && (
           <section className="showcase__block">
@@ -111,7 +104,6 @@ export default function ProjectShowcase({ slug }: { slug: string }) {
             <div className="showcase__links">
               {project.demo && (
                 <a className="cta" href={project.demo} target="_blank" rel="noreferrer">
-                  <span className="cta__glow" aria-hidden />
                   Live demo
                 </a>
               )}
@@ -135,7 +127,7 @@ export default function ProjectShowcase({ slug }: { slug: string }) {
             <span className="panel__next-title">{next.title}</span>
           </Link>
           <Link className="panel__esc" href={home} onClick={leave(home)}>
-            Back to the universe
+            Back to overview
           </Link>
         </footer>
       </article>

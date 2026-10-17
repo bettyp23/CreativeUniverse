@@ -11,11 +11,11 @@ export function artifactSurface(color: string) {
     m = new THREE.MeshPhysicalMaterial({
       color: new THREE.Color(color).multiplyScalar(0.35),
       emissive: new THREE.Color(color),
-      emissiveIntensity: 0.55,
-      roughness: 0.15,
+      emissiveIntensity: 0.22,
+      roughness: 0.3,
       metalness: 0.1,
       transparent: true,
-      opacity: 0.38,
+      opacity: 0.32,
       side: THREE.DoubleSide,
       depthWrite: false,
       toneMapped: false,
@@ -32,7 +32,7 @@ export function artifactLine(color: string) {
     m = new THREE.LineBasicMaterial({
       color: new THREE.Color(color).lerp(new THREE.Color("#ffffff"), 0.35),
       transparent: true,
-      opacity: 0.85,
+      opacity: 0.55,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
       toneMapped: false,
@@ -47,7 +47,7 @@ export function artifactGlow(color: string) {
   let m = glows.get(color);
   if (!m) {
     m = new THREE.MeshBasicMaterial({
-      color: new THREE.Color(color).lerp(new THREE.Color("#ffffff"), 0.45).multiplyScalar(1.6),
+      color: new THREE.Color(color).lerp(new THREE.Color("#ffffff"), 0.45),
       toneMapped: false,
     });
     glows.set(color, m);

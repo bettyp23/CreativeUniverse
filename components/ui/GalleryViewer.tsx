@@ -153,7 +153,6 @@ export function GalleryViewer() {
             </button>
             {url && (
               <a className="cta" href={url} target="_blank" rel="noreferrer">
-                <span className="cta__glow" aria-hidden />
                 Visit site ↗
               </a>
             )}

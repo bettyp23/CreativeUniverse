@@ -2,10 +2,10 @@ import type { ProjectType } from "@/lib/projects";
 
 /** One palette for every artifact, matching the colours of the three worlds. */
 export const ARTIFACT_PALETTE: Record<ProjectType, string> = {
-  ai: "#c26bff",
-  software: "#5b8cff",
-  prototype: "#ff9a4d",
-  design: "#2ee6c1",
+  ai: "#8f80e8",
+  software: "#5b8fe8",
+  prototype: "#d39268",
+  design: "#4fbfa8",
 };
 
 /** Speed of every artifact's idle rotation, in radians per second. */

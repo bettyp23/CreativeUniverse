@@ -5,17 +5,28 @@ export const site = {
   title: "Betty Phipps — Creative Universe",
   tagline: "Pick a star.",
   description:
-    "Pick a star. A universe of software, AI experiments, web designs and prototypes by Betty Phipps.",
+    "Betty Phipps designs and builds software, AI tools and websites. Founder of Pioneer Digital.",
   hero: {
-    heading: "Pick a star.",
-    body: "A universe of the things I make: software, AI experiments, web designs and prototypes, each with a world of its own.",
-    cta: "Start exploring",
-    hint: "or click any glowing world",
+    // TODO: check this role line describes you the way you want to be introduced.
+    eyebrow: "Software & AI developer · Founder of Pioneer Digital",
+    heading: "I design and build software, AI tools and websites.",
+    body: "Pick a star to explore the work, from production web apps and AI experiments to sites for real businesses.",
+    cta: "View work",
+    secondary: "Work with me",
   },
   links: {
     github: "https://github.com/bettyp23",
     // TODO: add your LinkedIn profile URL. The link stays hidden while this is empty.
     linkedin: "",
+    // TODO: add the email visitors can write to. The Email link stays hidden while this is empty.
+    email: "",
+  },
+  contact: {
+    // TODO: sign up at formspree.io, create a form and paste its ID here (the part after /f/).
+    // The contact form in About stays hidden while this is empty.
+    formspreeId: "",
+    heading: "Say hello",
+    intro: "Have a project, a question or an idea? Send me a note and I'll get back to you.",
   },
   about: {
     title: "About",

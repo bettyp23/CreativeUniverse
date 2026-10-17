@@ -57,15 +57,15 @@ export default function ShowcaseHero({ project }: { project: Project }) {
       gl={{ antialias: false, alpha: false }}
       aria-hidden
     >
-      <color attach="background" args={["#04030c"]} />
+      <color attach="background" args={["#070812"]} />
       <ambientLight intensity={0.3} />
       <pointLight position={[1, 1, 2]} color={color} intensity={4} />
       <Starfield count={1400} inner={4} outer={30} size={1.2} />
-      <Halo color={color} size={1.8} opacity={0.45} />
+      <Halo color={color} size={1.6} opacity={0.16} />
       <Artifact type={project.type} seed={project.slug} reduced={reduced} />
       <ArrivalCamera reduced={reduced} />
       <EffectComposer multisampling={0}>
-        <Bloom mipmapBlur intensity={1.1} luminanceThreshold={0.2} luminanceSmoothing={0.3} radius={0.7} />
+        <Bloom mipmapBlur intensity={0.4} luminanceThreshold={0.5} luminanceSmoothing={0.3} radius={0.6} />
         <Vignette offset={0.3} darkness={0.8} />
       </EffectComposer>
     </Canvas>

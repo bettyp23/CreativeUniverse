@@ -33,8 +33,8 @@ export default function UniverseScene() {
       }}
       aria-hidden
     >
-      <color attach="background" args={["#04030c"]} />
-      <fog attach="fog" args={["#04030c", 18, 48]} />
+      <color attach="background" args={["#070812"]} />
+      <fog attach="fog" args={["#070812", 18, 48]} />
       <PerformanceMonitor
         onDecline={() => {
           setDpr(1);
@@ -44,14 +44,14 @@ export default function UniverseScene() {
       />
       <AdaptiveDpr pixelated={false} />
 
-      <ambientLight intensity={0.25} />
-      <pointLight position={[0, 0, 0]} color="#8b6bff" intensity={20} distance={9} />
-      <pointLight position={[-6, 4, 6]} color="#5b8cff" intensity={30} distance={20} />
-      <pointLight position={[6, -3, 4]} color="#ff9a4d" intensity={18} distance={18} />
+      <ambientLight intensity={0.35} />
+      <directionalLight position={[-4, 5, 6]} color="#dfe8ff" intensity={0.8} />
+      <pointLight position={[0, 0, 0]} color="#4da3ff" intensity={8} distance={9} />
+      <pointLight position={[-6, 4, 6]} color="#9fb8ff" intensity={14} distance={20} />
 
       <Suspense fallback={null}>
         <Starfield />
-        <Starfield count={500} inner={1.5} outer={7} size={0.9} spin={-0.02} flat={0.55} />
+        <Starfield count={260} inner={1.5} outer={7} size={0.8} spin={-0.02} flat={0.55} />
         <Constellation />
         <OrbitRings />
         <Core />
@@ -65,8 +65,8 @@ export default function UniverseScene() {
       <LabelProjector />
 
       <EffectComposer enabled={fx} multisampling={0}>
-        <Bloom mipmapBlur intensity={0.95} luminanceThreshold={0.22} luminanceSmoothing={0.3} radius={0.75} />
-        <Vignette offset={0.25} darkness={0.85} />
+        <Bloom mipmapBlur intensity={0.35} luminanceThreshold={0.55} luminanceSmoothing={0.3} radius={0.6} />
+        <Vignette offset={0.25} darkness={0.7} />
       </EffectComposer>
     </Canvas>
   );

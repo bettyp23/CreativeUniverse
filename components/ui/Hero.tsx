@@ -18,14 +18,16 @@ export function Hero() {
       aria-hidden={hidden}
       inert={hidden ? true : undefined}
     >
+      <p className="hero__eyebrow">{site.hero.eyebrow}</p>
       <h1 className="hero__heading">{site.hero.heading}</h1>
       <p className="hero__body">{site.hero.body}</p>
       <div className="hero__actions">
         <button className="cta" onClick={() => goTo(sections[0].id)}>
-          <span className="cta__glow" aria-hidden />
           {site.hero.cta}
         </button>
-        <span className="hero__hint">{site.hero.hint}</span>
+        <a className="pill-link" href="/web/">
+          {site.hero.secondary}
+        </a>
       </div>
     </section>
   );

@@ -5,6 +5,7 @@ import { site } from "@/lib/site";
 import { useUniverse } from "@/lib/store";
 import { goTo } from "@/lib/useNavigation";
 import { Mark } from "./Mark";
+import { ContactForm } from "./ContactForm";
 
 /** A short About panel: what I make and how I think, plus where to find me. */
 export function AboutPanel() {
@@ -43,7 +44,7 @@ export function AboutPanel() {
           <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden>
             <path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          Back to the universe
+          Overview
         </button>
 
         <header className="panel__header">
@@ -62,6 +63,8 @@ export function AboutPanel() {
           ))}
         </ul>
 
+        {site.contact.formspreeId && <ContactForm formId={site.contact.formspreeId} />}
+
         <footer className="about__links">
           {links.github && (
             <a className="pill-link" href={links.github} target="_blank" rel="noreferrer">
@@ -71,6 +74,11 @@ export function AboutPanel() {
           {links.linkedin && (
             <a className="pill-link" href={links.linkedin} target="_blank" rel="noreferrer">
               LinkedIn
+            </a>
+          )}
+          {links.email && (
+            <a className="pill-link" href={`mailto:${links.email}`}>
+              Email
             </a>
           )}
         </footer>

@@ -9,75 +9,86 @@ import { goTo } from "@/lib/useNavigation";
 import { Halo } from "./Halo";
 import { worldPositions } from "./worldPositions";
 
-/** The abstract object that represents each world. */
+/** Evenly spread points on a sphere, for the AI Studio's point cloud. */
+function fibonacciSphere(n: number, r: number) {
+  const pts = new Float32Array(n * 3);
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < n; i++) {
+    const y = 1 - (i / (n - 1)) * 2;
+    const rad = Math.sqrt(1 - y * y);
+    const a = golden * i;
+    pts.set([Math.cos(a) * rad * r, y * r, Math.sin(a) * rad * r], i * 3);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.BufferAttribute(pts, 3));
+  return g;
+}
+
+/**
+ * The object that represents each world. All four share one material language,
+ * dark frosted glass with fine edges in the world's colour, so they read as one set.
+ */
 function Shape({ section, mats }: { section: Section; mats: THREE.MeshStandardMaterial[] }) {
   const spin = useRef<THREE.Group>(null);
-  const a = useRef<THREE.Mesh>(null);
-  const b = useRef<THREE.Mesh>(null);
-  const c = useRef<THREE.Mesh>(null);
-  const [m1, m2] = mats;
+  const a = useRef<THREE.Group>(null);
+  const [glass, light] = mats;
 
-  const edges = useMemo(() => {
-    if (section.shape === "crystal") return new THREE.EdgesGeometry(new THREE.OctahedronGeometry(0.78, 0));
-    if (section.shape === "knot") return new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.95, 0));
+  const geo = useMemo(() => {
+    if (section.shape === "crystal") return new THREE.EdgesGeometry(new THREE.BoxGeometry(0.62, 1.4, 0.16));
+    if (section.shape === "knot") return fibonacciSphere(520, 0.72);
     if (section.shape === "panes") return new THREE.EdgesGeometry(new THREE.PlaneGeometry(1.15, 0.78));
-    return new THREE.EdgesGeometry(new THREE.DodecahedronGeometry(0.95, 0));
+    return new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.82, 1));
   }, [section.shape]);
 
   useFrame((_, dt) => {
-    if (spin.current) spin.current.rotation.y += dt * 0.35;
-    if (section.shape === "gyro") {
-      if (a.current) a.current.rotation.x += dt * 0.9;
-      if (b.current) b.current.rotation.y += dt * 0.7;
-      if (c.current) c.current.rotation.z += dt * 0.5;
-    } else if (section.shape === "knot") {
-      if (a.current) a.current.rotation.x += dt * 0.25;
-    } else if (section.shape === "panes") {
-      if (a.current) a.current.rotation.x = 0.12 + Math.sin(performance.now() * 0.0006) * 0.08;
-    } else {
-      if (b.current) b.current.rotation.z += dt * 0.6;
-    }
+    if (spin.current) spin.current.rotation.y += dt * 0.18;
+    if (!a.current) return;
+    if (section.shape === "panes") a.current.rotation.x = 0.12 + Math.sin(performance.now() * 0.0005) * 0.06;
+    else a.current.rotation.x += dt * 0.12;
   });
 
-  const wire = (
-    <lineSegments geometry={edges} raycast={() => null}>
-      <lineBasicMaterial color={section.accent} transparent opacity={0.35} blending={THREE.AdditiveBlending} depthWrite={false} />
-    </lineSegments>
+  const edgeMat = (opacity: number) => (
+    <lineBasicMaterial color={section.accent} transparent opacity={opacity} depthWrite={false} />
   );
 
   if (section.shape === "crystal") {
-    // Dev Projects: a faceted crystal with orbiting fragments, like code blocks.
+    // Dev Projects: two glass monoliths, like slabs of engineered material.
     return (
-      <group ref={spin}>
-        <mesh material={m1} scale={[0.75, 1.15, 0.75]}>
-          <octahedronGeometry args={[0.6, 0]} />
+      <group ref={spin} rotation={[0, 0, 0.08]}>
+        <mesh material={glass}>
+          <boxGeometry args={[0.62, 1.4, 0.16]} />
         </mesh>
-        <group scale={[1, 1.15, 1]}>{wire}</group>
-        <group ref={b}>
-          {[0, 1, 2, 3, 4].map((i) => {
-            const ang = (i / 5) * Math.PI * 2;
-            return (
-              <mesh key={i} material={m2} position={[Math.cos(ang) * 1.05, Math.sin(ang * 2) * 0.25, Math.sin(ang) * 1.05]} rotation={[ang, ang, 0]}>
-                <boxGeometry args={[0.1, 0.1, 0.1]} />
-              </mesh>
-            );
-          })}
+        <lineSegments geometry={geo} raycast={() => null}>
+          {edgeMat(0.6)}
+        </lineSegments>
+        <group position={[0.42, -0.18, -0.32]} scale={0.62} rotation={[0, 0.5, 0]}>
+          <mesh material={glass}>
+            <boxGeometry args={[0.62, 1.4, 0.16]} />
+          </mesh>
+          <lineSegments geometry={geo} raycast={() => null}>
+            {edgeMat(0.35)}
+          </lineSegments>
         </group>
       </group>
     );
   }
 
   if (section.shape === "knot") {
-    // AI Studio: a looping knot, like a thought folding back on itself.
+    // AI Studio: a fine point cloud around a small glass core, like a model's latent space.
     return (
       <group ref={spin}>
-        <mesh ref={a} material={m1}>
-          <torusKnotGeometry args={[0.52, 0.11, 200, 24, 2, 3]} />
+        <group ref={a}>
+          <points geometry={geo} raycast={() => null}>
+            <pointsMaterial color={section.accent} size={0.022} sizeAttenuation transparent opacity={0.8} depthWrite={false} />
+          </points>
+        </group>
+        <mesh material={glass}>
+          <sphereGeometry args={[0.3, 48, 48]} />
         </mesh>
-        <mesh material={m2}>
-          <sphereGeometry args={[0.16, 24, 24]} />
+        <mesh rotation={[1.25, 0.2, 0]} raycast={() => null}>
+          <torusGeometry args={[0.98, 0.004, 6, 160]} />
+          <meshBasicMaterial color={section.accent} transparent opacity={0.45} />
         </mesh>
-        <group scale={0.95}>{wire}</group>
       </group>
     );
   }
@@ -92,60 +103,47 @@ function Shape({ section, mats }: { section: Section; mats: THREE.MeshStandardMa
     return (
       <group ref={spin}>
         <group ref={a} rotation={[0.12, -0.45, 0.04]} scale={0.82}>
-          {panes.map((p, i) => (
-            <group key={i} position={p}>
-              <mesh material={i === panes.length - 1 ? m1 : undefined}>
-                <boxGeometry args={[1.15, 0.78, 0.02]} />
-                {i !== panes.length - 1 && (
-                  <meshStandardMaterial
-                    color={section.color}
-                    emissive={section.color}
-                    emissiveIntensity={0.5}
-                    transparent
-                    opacity={0.22}
-                    depthWrite={false}
-                    toneMapped={false}
-                  />
-                )}
-              </mesh>
-              <lineSegments geometry={edges} position={[0, 0, 0.012]} raycast={() => null}>
-                <lineBasicMaterial color={section.accent} transparent opacity={0.7} blending={THREE.AdditiveBlending} depthWrite={false} />
-              </lineSegments>
-              {i === panes.length - 1 && (
-                <>
-                  <mesh position={[0, 0.27, 0.015]} material={m2}>
-                    <boxGeometry args={[1.05, 0.012, 0.005]} />
-                  </mesh>
-                  {[0, 1, 2].map((d) => (
-                    <mesh key={d} position={[-0.47 + d * 0.07, 0.33, 0.015]} material={m2}>
-                      <sphereGeometry args={[0.022, 12, 12]} />
+          {panes.map((p, i) => {
+            const front = i === panes.length - 1;
+            return (
+              <group key={i} position={p}>
+                <mesh material={glass}>
+                  <boxGeometry args={[1.15, 0.78, 0.02]} />
+                </mesh>
+                <lineSegments geometry={geo} position={[0, 0, 0.012]} raycast={() => null}>
+                  {edgeMat(front ? 0.6 : 0.3)}
+                </lineSegments>
+                {front && (
+                  <>
+                    <mesh position={[0, 0.27, 0.015]} material={light}>
+                      <boxGeometry args={[1.05, 0.006, 0.004]} />
                     </mesh>
-                  ))}
-                </>
-              )}
-            </group>
-          ))}
+                    {[0, 1, 2].map((d) => (
+                      <mesh key={d} position={[-0.47 + d * 0.06, 0.33, 0.015]} material={light}>
+                        <sphereGeometry args={[0.016, 12, 12]} />
+                      </mesh>
+                    ))}
+                  </>
+                )}
+              </group>
+            );
+          })}
         </group>
       </group>
     );
   }
 
-  // Innovation Lab: a gyroscope of nested rings around a spark.
+  // Innovation Lab: a wire lattice around a turning glass seed.
   return (
     <group ref={spin}>
-      <mesh ref={a} material={m1}>
-        <torusGeometry args={[0.78, 0.025, 12, 96]} />
-      </mesh>
-      <mesh ref={b} material={m1} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.6, 0.025, 12, 96]} />
-      </mesh>
-      <mesh ref={c} material={m2} rotation={[0, Math.PI / 2, 0]}>
-        <torusGeometry args={[0.44, 0.03, 12, 96]} />
-      </mesh>
-      <mesh material={m2}>
-        <icosahedronGeometry args={[0.18, 1]} />
-      </mesh>
-      <group scale={0.9}>{wire}</group>
+      <lineSegments geometry={geo} raycast={() => null}>
+        {edgeMat(0.5)}
+      </lineSegments>
+      <group ref={a}>
+        <mesh material={glass}>
+          <octahedronGeometry args={[0.34, 0]} />
+        </mesh>
+      </group>
     </group>
   );
 }
@@ -158,20 +156,23 @@ export function WorldNode({ section }: { section: Section }) {
   const portrait = useThree((st) => isPortrait(st.size.width, st.size.height));
   const position = positionFor(section, portrait);
 
-  const mats = useMemo(() => {
-    const m1 = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(section.color).multiplyScalar(0.25),
+  const mats = useMemo<THREE.MeshStandardMaterial[]>(() => {
+    // Dark frosted glass, faintly lit from within by the world's colour.
+    const m1 = new THREE.MeshPhysicalMaterial({
+      color: "#121a33",
       emissive: new THREE.Color(section.color),
-      emissiveIntensity: 1.2,
-      roughness: 0.25,
-      metalness: 0.6,
-      toneMapped: false,
+      emissiveIntensity: 0.16,
+      roughness: 0.35,
+      metalness: 0.2,
+      clearcoat: 1,
+      clearcoatRoughness: 0.3,
+      transparent: true,
+      opacity: 0.88,
     });
     const m2 = new THREE.MeshStandardMaterial({
       color: "#ffffff",
       emissive: new THREE.Color(section.accent),
-      emissiveIntensity: 1.6,
-      toneMapped: false,
+      emissiveIntensity: 0.7,
     });
     return [m1, m2];
   }, [section.color, section.accent]);
@@ -183,17 +184,17 @@ export function WorldNode({ section }: { section: Section }) {
     const dim = active !== null && !isActive;
     const t = state.clock.elapsedTime;
 
-    if (root.current) root.current.position.y = position[1] + Math.sin(t * 0.6 + seed) * 0.12;
+    if (root.current) root.current.position.y = position[1] + Math.sin(t * 0.5 + seed) * 0.06;
     if (inner.current) {
       const target = isActive ? 1.1 : isHover ? 1.15 : 1;
       const s = THREE.MathUtils.damp(inner.current.scale.x, target, 6, dt);
       inner.current.scale.setScalar(s);
     }
-    const em = isHover || isActive ? 1.35 : dim ? 0.35 : 0.95 + Math.sin(t * 1.4 + seed) * 0.12;
+    const em = isHover || isActive ? 0.42 : dim ? 0.06 : 0.16;
     mats[0].emissiveIntensity = THREE.MathUtils.damp(mats[0].emissiveIntensity, em, 5, dt);
-    mats[1].emissiveIntensity = THREE.MathUtils.damp(mats[1].emissiveIntensity, em * 1.3, 5, dt);
+    mats[1].emissiveIntensity = THREE.MathUtils.damp(mats[1].emissiveIntensity, em * 4.5, 5, dt);
     if (halo.current) {
-      const target = isHover || isActive ? 0.75 : dim ? 0.12 : 0.38;
+      const target = isHover || isActive ? 0.28 : dim ? 0.04 : 0.1;
       const u = halo.current.uniforms.uOpacity;
       u.value = THREE.MathUtils.damp(u.value, target, 5, dt);
     }
@@ -223,8 +224,8 @@ export function WorldNode({ section }: { section: Section }) {
 
   return (
     <group ref={root} position={position}>
-      <Halo ref={halo} color={section.color} size={3.6} opacity={0.38} />
-      <pointLight color={section.color} intensity={6} distance={4} decay={2} />
+      <Halo ref={halo} color={section.color} size={2.6} opacity={0.1} />
+      <pointLight color={section.color} intensity={2.5} distance={4} decay={2} />
       <group ref={inner}>
         <Shape section={section} mats={mats} />
       </group>

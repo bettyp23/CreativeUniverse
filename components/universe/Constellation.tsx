@@ -9,7 +9,7 @@ import { isPortrait, positionFor, sections } from "@/lib/sections";
  * A faint network of stars joined by hairlines, clustered around the core and
  * the three worlds so the scene reads as one connected constellation.
  */
-export function Constellation({ count = 90, maxDist = 1.9 }) {
+export function Constellation({ count = 54, maxDist = 1.7 }) {
   const group = useRef<THREE.Group>(null);
   const portrait = useThree((st) => isPortrait(st.size.width, st.size.height));
 
@@ -56,9 +56,9 @@ export function Constellation({ count = 90, maxDist = 1.9 }) {
     <group ref={group}>
       <lineSegments geometry={lines}>
         <lineBasicMaterial
-          color="#9aa6ff"
+          color="#9fb8ff"
           transparent
-          opacity={0.13}
+          opacity={0.06}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
@@ -66,10 +66,10 @@ export function Constellation({ count = 90, maxDist = 1.9 }) {
       <points geometry={points}>
         <pointsMaterial
           color="#e9e6ff"
-          size={0.05}
+          size={0.035}
           sizeAttenuation
           transparent
-          opacity={0.85}
+          opacity={0.6}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
